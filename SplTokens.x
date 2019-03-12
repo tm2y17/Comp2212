@@ -18,6 +18,9 @@ $white+       ;
   false          { tok (\p s -> TokenFalse p) }
   \<             { tok (\p s -> TokenLessThan p) }
   \+             { tok (\p s -> TokenPlus p) }
+  \-             { tok (\p s -> TokenSubtract  p) }
+  \*             { tok (\p s -> TokenMulti p) }
+  \/             { tok (\p s -> TokenDivide p) }
   if             { tok (\p s -> TokenIf p) }
   then           { tok (\p s -> TokenThen p) }
   else           { tok (\p s -> TokenElse p) }
@@ -49,6 +52,9 @@ data SplToken =
   TokenFalse AlexPosn            |
   TokenLessThan AlexPosn         |
   TokenPlus AlexPosn             |
+  TokenSubtract AlexPosn         |
+  TokenMulti AlexPosn            |
+  TokenDivide AlexPosn           |
   TokenIf AlexPosn               |
   TokenThen AlexPosn             |
   TokenElse AlexPosn             |
@@ -75,6 +81,9 @@ tokenPosn (TokenTrue  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenFalse  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLessThan  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenPlus  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenSubtract (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenMulti  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenDivide (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenIf (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenThen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenElse (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
