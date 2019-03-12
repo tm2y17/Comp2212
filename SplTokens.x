@@ -17,6 +17,7 @@ $white+       ;
   Int\[\]\[\]    { tok (\p s -> TokenTypeIntMatrix p) }
   $digit+        { tok (\p s -> TokenInt p (read s)) }
   \[ [$digit \,]* $digit \]   { tok (\p s -> TokenIntList p s) } 
+  \[ \[ [$digit \,]* $digit \]* \[ [$digit \,]* $digit \] \]  { tok (\p s -> TokenTypeIntMatrix p s) } 
   true           { tok (\p s -> TokenTrue p) }
   false          { tok (\p s -> TokenFalse p) }
   \<             { tok (\p s -> TokenLessThan p) }
@@ -29,6 +30,8 @@ $white+       ;
   else           { tok (\p s -> TokenElse p) }
   while          { tok (\p s -> TokenWhile p) }
   length         { tok (\p s -> TokenLength p) }
+  stream         { tok (\p s -> TokenStream p) }
+  print          { tok (\p s -> TokenPrint p) }
   =              { tok (\p s -> TokenEq p )}
   ==             { tok (\p s -> TokenCompare p )}
   \(             { tok (\p s -> TokenLParen p) }
@@ -41,8 +44,6 @@ $white+       ;
   \.             { tok (\p s -> TokenDot p) }
   \,             { tok (\p s -> TokenComma p) }
   $alpha [$alpha $digit \_ \’]*   { tok (\p s -> TokenVar p s) } 
-  stream         { tok (\p s -> TokenStream p) }
-  print          { tok (\p s -> TokenPrint p) }
 { 
 -- Each action has type :: AlexPosn -> String -> MDLToken 
 
@@ -57,6 +58,7 @@ data SplToken =
   TokenTypeIntList AlexPosn      | 
   TokenTypeIntMatrix AlexPosn    |
   TokenIntList AlexPosn String   |
+  TokenTypeIntMatrix AlexPosn String |
   TokenTrue AlexPosn             |
   TokenFalse AlexPosn            |
   TokenLessThan AlexPosn         |
@@ -69,6 +71,8 @@ data SplToken =
   TokenElse AlexPosn             |
   TokenWhile AlexPosn            |
   TokenLength AlexPosn           |
+  TokenStream AlexPosn           |
+  TokenPrint AlexPosn            |
   TokenEq AlexPosn               |
   TokenCompare AlexPosn          |
   TokenLParen AlexPosn           |
@@ -80,8 +84,6 @@ data SplToken =
   TokenSemicolon AlexPosn        |
   TokenDot AlexPosn              |
   TokenComma AlexPosn            |
-  TokenStream AlexPosn           |
-  TokenPrint AlexPosn            |
   TokenVar AlexPosn String
   deriving (Eq,Show) 
 
@@ -92,6 +94,7 @@ tokenPosn (TokenInt  (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeIntList  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeIntMatrix (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenIntList (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenTypeIntMatrix (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTrue  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenFalse  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLessThan  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
@@ -104,6 +107,8 @@ tokenPosn (TokenThen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenElse (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenWhile (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLength (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenStream (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenPrint (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenEq  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenCompare  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLParen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
@@ -116,7 +121,5 @@ tokenPosn (TokenSemicolon (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenDot (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenComma (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenVar (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenStream (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenPrint (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 
 }
