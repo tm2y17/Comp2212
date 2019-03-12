@@ -12,12 +12,11 @@ tokens :-
 $white+       ; 
   "--".*        ; 
   Bool           { tok (\p s -> TokenTypeBool p)} 
-  Int            { tok (\p s -> TokenTypeInt p) }
-  Int\[\]        { tok (\p s -> TokenTypeIntList p) }
   Int\[\]\[\]    { tok (\p s -> TokenTypeIntMatrix p) }
-  $digit+        { tok (\p s -> TokenInt p (read s)) }
+  Int\[\]        { tok (\p s -> TokenTypeIntList p) }
+  Int            { tok (\p s -> TokenTypeInt p) }
   \[ [$digit \,]* $digit \]   { tok (\p s -> TokenIntList p s) } 
-  \[ \[ [$digit \,]* $digit \]* \[ [$digit \,]* $digit \] \]  { tok (\p s -> TokenTypeIntMatrix p s) } 
+  $digit+        { tok (\p s -> TokenInt p (read s)) }
   true           { tok (\p s -> TokenTrue p) }
   false          { tok (\p s -> TokenFalse p) }
   \<             { tok (\p s -> TokenLessThan p) }
@@ -58,7 +57,6 @@ data SplToken =
   TokenTypeIntList AlexPosn      | 
   TokenTypeIntMatrix AlexPosn    |
   TokenIntList AlexPosn String   |
-  TokenTypeIntMatrix AlexPosn String |
   TokenTrue AlexPosn             |
   TokenFalse AlexPosn            |
   TokenLessThan AlexPosn         |
@@ -94,7 +92,6 @@ tokenPosn (TokenInt  (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeIntList  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeIntMatrix (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenIntList (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenTypeIntMatrix (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTrue  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenFalse  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLessThan  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
