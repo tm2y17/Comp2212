@@ -41,6 +41,8 @@ $white+       ;
   \.             { tok (\p s -> TokenDot p) }
   \,             { tok (\p s -> TokenComma p) }
   $alpha [$alpha $digit \_ \’]*   { tok (\p s -> TokenVar p s) } 
+  stream         { tok (\p s -> TokenStream p) }
+  print          { tok (\p s -> TokenPrint p) }
 { 
 -- Each action has type :: AlexPosn -> String -> MDLToken 
 
@@ -78,6 +80,8 @@ data SplToken =
   TokenSemicolon AlexPosn        |
   TokenDot AlexPosn              |
   TokenComma AlexPosn            |
+  TokenStream AlexPosn           |
+  TokenPrint AlexPosn            |
   TokenVar AlexPosn String
   deriving (Eq,Show) 
 
@@ -112,5 +116,7 @@ tokenPosn (TokenSemicolon (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenDot (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenComma (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenVar (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenStream (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenPrint (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 
 }
