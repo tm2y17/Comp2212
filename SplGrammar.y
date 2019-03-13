@@ -40,9 +40,22 @@ import SplTokens
     ','    { TokenComma _ }
     var    { TokenVar _ $$ }
 
+%nonassoc '{' '}'
+%nonassoc '[' ']'
+%nonassoc '(' ')' 
+%nonassoc '.' ','
+%nonassoc while
 %nonassoc if
 %nonassoc then
 %nonassoc else
+%nonassoc print
+%nonassoc '='
+%left '<' '=='
+%left '+' '-'
+%left '*' '/'
+%nonassoc length
+%nonassoc stream
+%nonassoc int true false var intList
 
 
 %% 
