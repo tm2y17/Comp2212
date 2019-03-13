@@ -43,7 +43,7 @@ import SplTokens
 %nonassoc '{' '}'
 %nonassoc '[' ']'
 %nonassoc '(' ')' 
-%nonassoc '.' ','
+%nonassoc ','
 %nonassoc while
 %nonassoc if
 %nonassoc then
@@ -53,7 +53,7 @@ import SplTokens
 %left '<' '=='
 %left '+' '-'
 %left '*' '/'
-%nonassoc length
+%nonassoc '.' length
 %nonassoc stream
 %nonassoc int true false var intList
 
