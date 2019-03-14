@@ -41,8 +41,9 @@ import SplTokens
     var    { TokenVar _ $$ }
 
 %nonassoc '{' '}'
-%nonassoc '[' ']'
+%left ';' 
 %nonassoc '(' ')' 
+%nonassoc '[' ']'
 %nonassoc ','
 %nonassoc while
 %nonassoc if
@@ -71,16 +72,20 @@ Exp : int                                       { SplInt $1 }
      | Exp '/' Exp                            { SplDivide $1 $3 }
      | '(' Exp ')'                               { $2 }
      | stream                                    { SplStream }
-     | Exp ';' Exp                             { SplConnecting $1 $3 }
-     | Type var '=' Exp                         { SplDeclare $1 $2 $3 }
+     | Int var '=' Exp                         { SplIntDeclare $1 $2 $3 }
+     | Bool var '=' Exp                         { SplBoolDeclare $1 $2 $4}
      | var '=' Exp                              { SplAssignment $1 $3 }
      | while '(' Exp ')' '{' Exp '}'           { SplWhile $3 $6 }
      | print '(' Exp ')'                        { SplPrint $3 }
      | intList '[' int ']'                       { SplIntListgetElement $1 $3 }  
      | IntList var '=' Exp                      { SplIntListAssignment $2 $4 }
      | IntList var '=' '{' ListContent '}'       { SplIntListDeclare $2 $5 }
-     | IntMatrix var '=' Exp                    { SplIntMatrix $2 $4 }
+     | IntMatrix var '=' Exp                   { SplIntMatrix $2 }
      | intList '.' length                        { SplGetLength $1 }
+     | if Exp then Exp else Exp                  { SplIfThenElse $2 $4 $6 } 
+     | if Exp then Exp                           { SplIfThen $2 $4 } 
+     | Exp ';' Exp                               { SplConnecting $1 $3}
+     | Exp ';'                                   { SplSentence $1}
 
 Type : Bool            { SplTypeBool } 
      | Int             { SplTypeInt } 
@@ -104,9 +109,9 @@ data SplListContent = SplNum Int | SplContinuousNum Int SplListContent
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
     | SplLessThan Expr Expr | SplAdd Expr Expr | SplSubtract Expr Expr | SplMulti Expr Expr
-    | SplDivide Expr Expr | SplStream | SplConnecting Expr Expr | SplDeclare SplType String Expr
-    | SplAssignment String Expr | SplWhile Expr Expr | SplPrint Expr | SplIntListgetElement SplTypeIntList Int
-    | SplIntListAssignment String Expr | SplIntListDeclare String SplListContent | SplIntMatrix String Expr
-    | SplGetLength SplTypeIntList
+    | SplDivide Expr Expr | SplDeclare SplType String Expr
+    | SplAssignment String Expr | SplWhile Expr Expr | SplPrint Expr | SplIntListgetElement String Int
+    | SplIntListAssignment String Expr | SplIntListDeclare String SplListContent | SplIntMatrix String
+    | SplGetLength String | SplIfThenElse Expr Expr Expr | SplIfThen Expr Expr
     deriving (Show,Eq)
 }
