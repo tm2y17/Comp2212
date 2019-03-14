@@ -72,8 +72,8 @@ Exp : int                                       { SplInt $1 }
      | Exp '/' Exp                            { SplDivide $1 $3 }
      | '(' Exp ')'                               { $2 }
      | stream                                    { SplStream }
-     | Int var '=' Exp                         { SplIntDeclare $1 $2 $3 }
-     | Bool var '=' Exp                         { SplBoolDeclare $1 $2 $4}
+     | Int var '=' Exp                         { SplIntDeclare $2 $4 }
+     | Bool var '=' Exp                         { SplBoolDeclare $2 $4}
      | var '=' Exp                              { SplAssignment $1 $3 }
      | while '(' Exp ')' '{' Exp '}'           { SplWhile $3 $6 }
      | print '(' Exp ')'                        { SplPrint $3 }
@@ -86,12 +86,7 @@ Exp : int                                       { SplInt $1 }
      | if Exp then Exp                           { SplIfThen $2 $4 } 
      | Exp ';' Exp                               { SplConnecting $1 $3}
      | Exp ';'                                   { SplSentence $1}
-
-Type : Bool            { SplTypeBool } 
-     | Int             { SplTypeInt } 
-     | IntMatrix       { SplTypeIntMatrix }
-     | IntList         { SplTypeIntList }
-     
+  
 ListContent  : Int                     { SplNum $1}          
              | Int ',' ListContent     { SplContinuousNum $1 $3 }
 
@@ -109,9 +104,10 @@ data SplListContent = SplNum Int | SplContinuousNum Int SplListContent
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
     | SplLessThan Expr Expr | SplAdd Expr Expr | SplSubtract Expr Expr | SplMulti Expr Expr
-    | SplDivide Expr Expr | SplDeclare SplType String Expr
+    | SplDivide Expr Expr | SplSteam | SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplAssignment String Expr | SplWhile Expr Expr | SplPrint Expr | SplIntListgetElement String Int
     | SplIntListAssignment String Expr | SplIntListDeclare String SplListContent | SplIntMatrix String
-    | SplGetLength String | SplIfThenElse Expr Expr Expr | SplIfThen Expr Expr
+    | SplGetLength String | SplIfThenElse Expr Expr Expr | SplIfThen Expr Expr | SplConnecting Expr Expr
+    | SplSentence Expr
     deriving (Show,Eq)
 }
