@@ -30,8 +30,11 @@ tokens :-
   then           { tok (\p s -> TokenThen p) }
   else           { tok (\p s -> TokenElse p) }
   while          { tok (\p s -> TokenWhile p) }
-  length         { tok (\p s -> TokenLength p) }
-  stream         { tok (\p s -> TokenStream p) }
+  \.length       { tok (\p s -> TokenLength p) }
+  \.push         { tok (\p s -> TokenPush p) }
+  \.pop          { tok (\p s -> TokenPop p) }
+  \.getElement   { tok (\p s -> TokenGetElement p) }
+  streams        { tok (\p s -> TokenStream p) }
   print          { tok (\p s -> TokenPrint p) }
   =              { tok (\p s -> TokenEq p )}
   ==             { tok (\p s -> TokenCompare p )}
@@ -42,7 +45,6 @@ tokens :-
   \{             { tok (\p s -> TokenLBigParen p) }
   \}             { tok (\p s -> TokenRBigParen p) }
   \;             { tok (\p s -> TokenSemicolon p) }
-  \.             { tok (\p s -> TokenDot p) }
 
   $alpha [$alpha $digit \_ \’]*   { tok (\p s -> TokenVar p s) } 
 { 
@@ -72,6 +74,9 @@ data SplToken =
   TokenElse AlexPosn             |
   TokenWhile AlexPosn            |
   TokenLength AlexPosn           |
+  TokenPush AlexPosn             |
+  TokenPop  AlexPosn             |
+  TokenGetElement  AlexPosn      |
   TokenStream AlexPosn           |
   TokenPrint AlexPosn            |
   TokenEq AlexPosn               |
@@ -83,7 +88,6 @@ data SplToken =
   TokenLBigParen AlexPosn        |
   TokenRBigParen AlexPosn        |
   TokenSemicolon AlexPosn        |
-  TokenDot AlexPosn              |
   TokenVar AlexPosn String
   deriving (Eq,Show) 
 
@@ -107,6 +111,9 @@ tokenPosn (TokenThen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenElse (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenWhile (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLength (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenPush (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenPop (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenGetElement (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenStream (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenPrint (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenEq  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
@@ -118,7 +125,6 @@ tokenPosn (TokenRBracket (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLBigParen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenRBigParen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenSemicolon (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenDot (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenVar (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
 
 }
