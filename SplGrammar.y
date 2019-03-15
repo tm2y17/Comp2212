@@ -7,6 +7,7 @@ import SplTokens
 %tokentype { SplToken } 
 %error { parseError }
 %token 
+    nextLine  { TokenNextLine _ }
     Bool      { TokenTypeBool _ } 
     IntMatrix { TokenTypeIntMatrix _ }
     IntList   { TokenTypeIntList _ }
@@ -37,15 +38,15 @@ import SplTokens
     '}'    { TokenRBigParen _ }
     ';'    { TokenSemicolon _ }
     '.'    { TokenDot _ }
-    ','    { TokenComma _ }
     var    { TokenVar _ $$ }
 
+%nonassoc nextLine
+%nonassoc while
 %nonassoc '{' '}'
 %left ';' 
 %nonassoc '(' ')' 
 %nonassoc '[' ']'
 %nonassoc ','
-%nonassoc while
 %nonassoc if
 %nonassoc then
 %nonassoc else
@@ -75,20 +76,17 @@ Exp : int                                       { SplInt $1 }
      | Int var '=' Exp                         { SplIntDeclare $2 $4 }
      | Bool var '=' Exp                         { SplBoolDeclare $2 $4}
      | var '=' Exp                              { SplAssignment $1 $3 }
-     | while '(' Exp ')' '{' Exp '}'           { SplWhile $3 $6 }
+     | while '(' Exp ')' '{' nextLine Exp nextLine '}'   { SplWhile $3 $7 }
      | print '(' Exp ')'                        { SplPrint $3 }
      | intList '[' int ']'                       { SplIntListgetElement $1 $3 }  
      | IntList var '=' Exp                      { SplIntListAssignment $2 $4 }
-     | IntList var '=' '{' ListContent '}'       { SplIntListDeclare $2 $5 }
      | IntMatrix var '=' Exp                   { SplIntMatrix $2 }
      | intList '.' length                        { SplGetLength $1 }
-     | if Exp then Exp else Exp                  { SplIfThenElse $2 $4 $6 } 
-     | if Exp then Exp                           { SplIfThen $2 $4 } 
+     | if Exp nextLine then Exp nextLine else Exp    { SplIfThenElse $2 $5 $8 } 
+     | if Exp nextLine then Exp                      { SplIfThen $2 $5 } 
      | Exp ';' Exp                               { SplConnecting $1 $3}
      | Exp ';'                                   { SplSentence $1}
-  
-ListContent  : Int                     { SplNum $1}          
-             | Int ',' ListContent     { SplContinuousNum $1 $3 }
+
 
 
 {
@@ -99,14 +97,12 @@ parseError (t:ts) = error ("Parse error at line:column " ++ (tokenPosn t))
 data SplType = SplTypeInt | SplTypeBool | SplTypeIntMatrix | SplTypeIntList
     deriving (Show,Eq)
 
-data SplListContent = SplNum Int | SplContinuousNum Int SplListContent
-    deriving (Show,Eq)
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
     | SplLessThan Expr Expr | SplAdd Expr Expr | SplSubtract Expr Expr | SplMulti Expr Expr
-    | SplDivide Expr Expr | SplSteam | SplIntDeclare String Expr | SplBoolDeclare String Expr
+    | SplDivide Expr Expr | SplStream | SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplAssignment String Expr | SplWhile Expr Expr | SplPrint Expr | SplIntListgetElement String Int
-    | SplIntListAssignment String Expr | SplIntListDeclare String SplListContent | SplIntMatrix String
+    | SplIntListAssignment String Expr | SplIntMatrix String
     | SplGetLength String | SplIfThenElse Expr Expr Expr | SplIfThen Expr Expr | SplConnecting Expr Expr
     | SplSentence Expr
     deriving (Show,Eq)
