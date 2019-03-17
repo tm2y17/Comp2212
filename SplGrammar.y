@@ -66,7 +66,7 @@ Sentence :  Int var '=' Exp                                    { SplIntDeclare $
      | var '=' Exp                                          { SplAssignment $1 $3 }
      | return '(' Exp ')'                                    { SplReturn $3 }
      | IntList var '=' Exp                                  { SplIntListAssignment $2 $4 }
-     | IntMatrix var '=' Exp                                { SplIntMatrix $2 }                  
+     | IntMatrix var '=' streams                                { SplIntMatrix $2 }                  
      | while '(' Exp ')' '{' nextLine Sentence nextLine '}'    { SplWhile $3 $7 }
      | if Exp nextLine then Sentence nextLine else Sentence    { SplIfThenElse $2 $5 $8 }
      | if Exp nextLine then Sentence                                { SplIfThen $2 $5 } 
