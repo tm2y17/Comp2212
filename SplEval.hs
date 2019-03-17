@@ -100,7 +100,11 @@ evalExpr (SplInt n) = (SplInt n)
 
 
 
-
+getVarTuple :: String -> Environment -> (String,String,SplType)
+getVarTuple name (x:xs) 
+    | name == (get1st x) = x
+    | name /= (get1st x) = getVarTuple name xs
+    | otherwise = error "no variable found"
 
 
 checkSameVariable :: String -> Environment -> Bool
