@@ -22,7 +22,6 @@ import SplTokens
     '*'    { TokenMulti _ }
     '/'    { TokenDivide _ }
     if     { TokenIf _ }
-    then   { TokenThen _ }
     else   { TokenElse _ }
     while  { TokenWhile _ }
     length { TokenLength _ }
@@ -68,8 +67,8 @@ Sentence :  Int var '=' Exp                                    { SplIntDeclare $
      | IntList var '=' Exp                                  { SplIntListAssignment $2 $4 }
      | IntMatrix var '=' streams                                { SplIntMatrix $2 }                  
      | while '(' Exp ')' '{' nextLine Sentence nextLine '}'    { SplWhile $3 $7 }
-     | if Exp nextLine then Sentence nextLine else Sentence    { SplIfThenElse $2 $5 $8 }
-     | if Exp nextLine then Sentence                                { SplIfThen $2 $5 } 
+     | if '(' Exp ')' '{' nextLine Sentence nextLine '}' else '{' nextLine Sentence nextLine '}'  { SplIfThenElse $3 $7 $13 }
+     | if '(' Exp ')' '{' nextLine Sentence nextLine '}'                   { SplIfThen $3 $7 } 
      | Sentence nextLine Sentence                                { SplConnecting $1 $3}
      | var push  '(' Exp ')'                                    { SplIntListPush $1  $4}
      | var pop '(' ')'                                      { SplIntListPop $1 }
