@@ -27,7 +27,6 @@ tokens :-
   \*             { tok (\p s -> TokenMulti p) }
   \/             { tok (\p s -> TokenDivide p) }
   if             { tok (\p s -> TokenIf p) }
-  then           { tok (\p s -> TokenThen p) }
   else           { tok (\p s -> TokenElse p) }
   while          { tok (\p s -> TokenWhile p) }
   \.length       { tok (\p s -> TokenLength p) }
@@ -70,7 +69,6 @@ data SplToken =
   TokenMulti AlexPosn            |
   TokenDivide AlexPosn           |
   TokenIf AlexPosn               |
-  TokenThen AlexPosn             |
   TokenElse AlexPosn             |
   TokenWhile AlexPosn            |
   TokenLength AlexPosn           |
@@ -78,7 +76,7 @@ data SplToken =
   TokenPop  AlexPosn             |
   TokenGetElement  AlexPosn      |
   TokenStream AlexPosn           |
-  TokenReturn AlexPosn            |
+  TokenReturn AlexPosn           |
   TokenEq AlexPosn               |
   TokenCompare AlexPosn          |
   TokenLParen AlexPosn           |
@@ -107,7 +105,6 @@ tokenPosn (TokenSubtract (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenMulti  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenDivide (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenIf (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenThen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenElse (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenWhile (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLength (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
