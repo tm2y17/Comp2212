@@ -35,7 +35,7 @@ tokens :-
   \.pop          { tok (\p s -> TokenPop p) }
   \.getElement   { tok (\p s -> TokenGetElement p) }
   streams        { tok (\p s -> TokenStream p) }
-  print          { tok (\p s -> TokenPrint p) }
+  return         { tok (\p s -> TokenReturn p) }
   =              { tok (\p s -> TokenEq p )}
   ==             { tok (\p s -> TokenCompare p )}
   \(             { tok (\p s -> TokenLParen p) }
@@ -78,7 +78,7 @@ data SplToken =
   TokenPop  AlexPosn             |
   TokenGetElement  AlexPosn      |
   TokenStream AlexPosn           |
-  TokenPrint AlexPosn            |
+  TokenReturn AlexPosn            |
   TokenEq AlexPosn               |
   TokenCompare AlexPosn          |
   TokenLParen AlexPosn           |
@@ -115,7 +115,7 @@ tokenPosn (TokenPush (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenPop (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenGetElement (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenStream (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
-tokenPosn (TokenPrint (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenReturn (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenEq  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenCompare  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenLParen (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
