@@ -72,7 +72,7 @@ Sentence :  Int var '=' Exp                                    { SplIntDeclare $
      | if Exp nextLine then Sentence                                { SplIfThen $2 $5 } 
      | Sentence nextLine Sentence                                { SplConnecting $1 $3}
      | var push  '(' Exp ')'                                    { SplIntListPush $1  $4}
-     | var pop '(' Exp ')'                                      { SplIntListPop $1 $4}
+     | var pop '(' ')'                                      { SplIntListPop $1 }
      
 Exp :: {Expr}
 Exp : int                                       { SplInt $1 }
@@ -101,7 +101,7 @@ data Sentence =  SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplAssignment Expr Expr | SplReturn Expr | SplIntListAssignment String Expr 
     | SplIntMatrix String | SplWhile Expr Sentence | SplIfThenElse Expr Sentence Sentence
     | SplIfThen Expr Sentence | SplConnecting Sentence Sentence 
-    | SplIntListPush String Expr | SplIntListPop String Expr
+    | SplIntListPush String Expr | SplIntListPop String 
     deriving (Show,Eq)
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
