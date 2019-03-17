@@ -4,6 +4,7 @@ import System.Environment
 import Control.Exception
 import System.IO
 import Data.List
+import SplEval
 
 main :: IO ()
 main = catch main' noParse
@@ -16,11 +17,14 @@ main' = do (fileName : _ ) <- getArgs
 
            content <-  getContents
            let int_List = transfer (lines content)
-           print int_List
+           
+           let result = evalLoop (parseToState parsedProg (transform int_List) )
 
-           --putStrLn ("    ")
-           --putStrLn ("standard output: ")
-           --sequence_ $ (matrixToStringList int_List) >>= (\x -> [putStrLn x])
+           putStrLn ("Matrix: "++result)
+           --[[Int]]
+           putStrLn ("    ")
+           putStrLn ("standard output: ")
+           sequence_ $ (matrixToStringList (transform (read result :: [[Int]]) ) ) >>= (\x -> [putStrLn x])
 
 noParse :: ErrorCall -> IO ()
 noParse e = do let err =  show e
@@ -37,3 +41,7 @@ toSpaceSeparatedString = intercalate " "
 matrixToStringList :: [[Int]] -> [String]
 matrixToStringList (x:xs) = [(toSpaceSeparatedString (map show x))]++matrixToStringList xs
 matrixToStringList [] = []
+
+transform:: [[a]]->[[a]]
+transform ([]:_) = []
+transform x = (map head x) : transform (map tail x)
