@@ -69,25 +69,8 @@ eval ( (SplIntMatrixDeclare var), rest, e)
 
 
 
-isSplInt :: Expr -> Bool
-isSplInt (SplInt x) = True
-isSplInt _ = False
+    
 
-isSplTrue :: Expr -> Bool
-isSplTrue SplTrue = True
-isSplTrue _ = False
-
-isSplFalse :: Expr -> Bool
-isSplFalse SplFalse = True
-isSplFalse _ = False
-
-isSplIntList:: Expr -> Bool
-isSplIntList (SplIntList x) = True
-isSplIntList _ = False
-
-isReturn :: Sentence -> Bool
-isReturn (SplReturn Expr) = True
-isReturn _ = False
 
 --Less Than Exp reduction
 evalExpr :: Expr -> Expr
