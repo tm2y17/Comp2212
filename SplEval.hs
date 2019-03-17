@@ -22,6 +22,12 @@ evalLoop (current, rest, e) int_list
     | !(isReturn current) = evalLoop (eval (current, rest, e))
 -}
 
+checkSameVariable :: String -> Environment -> Bool
+checkSameVariable var (x:xs)
+    | var == fst x = True || checkSameVariable var xs
+    | var /= fst x = False || checkSameVariable var xs
+checkSameVariable _ [] = False
+
 eval :: State -> State
 -- SplIntDeclare  Int i = 3
 eval ( (SplIntDeclare var (SplInt x) ),rest, e) 
