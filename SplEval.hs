@@ -65,11 +65,45 @@ eval ( (SplIntMatrixDeclare var), rest, e)
 -- SplAssignment      Exp = Exp
 
 
-
 -- push     x.push(3)
+eval ( (SplIntListPush var (SplInt x) ), rest, e)
+    | length rest > 0 && c == TyIntList = eval (head rest, tail rest, currentEnvir ++ [(a,new_int_list,c)] )
+    | c /= TyIntList = error "The type is not a IntList"
+    | otherwise = error "invalid last line"
+    where currentEnvir = deleteEnvir var e
+          (a,b,c) = getVarTuple var e
+          int_list = read b :: [Int]
+          new_int_list = show (int_list++[x])
+
+-- push     x.push([1,2,3])
+eval ( (SplIntListPush var (SplIntList x) ), rest, e)
+    | length rest > 0 && c == TyIntMatrix = eval (head rest, tail rest, currentEnvir ++ [(a,new_int_list,c)] )
+    | c /= TyIntMatrix = error "The type is not a IntMatrix"
+    | otherwise = error "invalid last line"
+    where currentEnvir = deleteEnvir var e
+          (a,b,c) = getVarTuple var e
+          int_list = read b :: [[Int]]
+          new_x = read x :: [Int]
+          new_int_list = show (int_list++[new_x])
+
+-- pop   x.pop()  IntList   pop   x.pop()  IntMatrix
+eval ( (SplIntListPop var), rest, e)
+    | length rest > 0 && c == TyIntList && length real_b > 0 =  eval (head rest, tail rest, currentEnvir ++ [(a,new_b,c)] ) 
+    | length rest > 0 && c == TyIntMatrix && length real_b' > 0 =  eval (head rest, tail rest, currentEnvir ++ [(a,new_b',c)] ) 
+    | length real_b < 1 || length real_b'<1 = error "cannot pop because the list is empty"
+    | c /= TyIntMatrix = error "The type is not a Intmatrix"
+    | c /= TyIntList = error "The type is not a IntList"
+    | length rest == 0 = error "invalid last line"
+    where currentEnvir = deleteEnvir var e
+          (a,b,c) = getVarTuple var e
+          real_b = read b :: [Int]
+          real_b' = read b :: [[Int]]
+          new_b = show (init real_b)
+          new_b' = show (init real_b')
 
 
 
+          
 
 --Less Than Exp reduction
 evalExpr :: Expr -> Expr
