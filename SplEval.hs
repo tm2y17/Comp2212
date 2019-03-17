@@ -140,6 +140,11 @@ getVarTuple name (x:xs)
     | name /= (get1st x) = getVarTuple name xs
     | otherwise = error "no variable found"
 
+deleteEnvir :: String -> Environment -> Environment
+deleteEnvir name (x:xs)
+    | name == (get1st x) = [] ++ deleteEnvir name xs
+    | name /= (get1st x) = [x] ++ deleteEnvir name xs
+deleteEnvir _ [] = [] 
 
 checkSameVariable :: String -> Environment -> Bool
 checkSameVariable var (x:xs)
