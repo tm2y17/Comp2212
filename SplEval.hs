@@ -1,9 +1,11 @@
 module SplEval where
 import SplGrammar
     
-type Environment = [(String,String)]
-type State = (Sentence,[Sentence],Environment)
+data SplType = TyInt | TyBool | TyIntList | TyIntMatrix 
+    deriving (Show,Eq)
 
+type Environment = [(String,String,SplType)]
+type State = (Sentence,[Sentence],Environment)
 
 formatSentence :: Sentence -> [Sentence]
 formatSentence (SplConnecting x1 x2) = formatSentence x1 ++ formatSentence x2
@@ -11,6 +13,12 @@ formatSentence x = [x]
 
 parseToState :: Sentence -> State
 parseToState s = (head (formatSentence s), tail (formatSentence s),[])
+
+checkSameVariable :: String -> Environment -> Bool
+checkSameVariable var (x:xs)
+    | var == fst x = True || checkSameVariable var xs
+    | var /= fst x = False || checkSameVariable var xs
+checkSameVariable _ [] = False
 
 {-
 getMatrix :: Sentence -> Environment -> String
@@ -22,48 +30,43 @@ evalLoop (current, rest, e) int_list
     | !(isReturn current) = evalLoop (eval (current, rest, e))
 -}
 
-checkSameVariable :: String -> Environment -> Bool
-checkSameVariable var (x:xs)
-    | var == fst x = True || checkSameVariable var xs
-    | var /= fst x = False || checkSameVariable var xs
-checkSameVariable _ [] = False
-
 eval :: State -> State
 -- SplIntDeclare  Int i = 3
 eval ( (SplIntDeclare var (SplInt x) ),rest, e) 
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var,(show x)):e )
+    | length rest > 0 = eval (head rest, tail rest, (var,(show x), TyInt):e )
     | otherwise = error "invalid last line"
 eval ( (SplIntDeclare var _ ),rest, e) = error "Invalid variable, Int expected"
 
 -- SplBoolDeclare  Bool x = false
 eval ( (SplBoolDeclare var SplTrue ),rest, e) 
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var, "True"):e )
+    | length rest > 0 = eval (head rest, tail rest, (var, "True", TyBool):e )
     | otherwise = error "invalid last line"
 eval ( (SplBoolDeclare var SplFalse ),rest, e) 
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var, "False"):e )
+    | length rest > 0 = eval (head rest, tail rest, (var, "False", TyBool):e )
     | otherwise = error "invalid last line"
 eval ( (SplBoolDeclare var _),rest, e) = error "Invalid variable, Bool expected"
 
 -- SplIntListDeclare1   Int[] x = [1,2,3]
 eval ( (SplIntListAssignment var (SplIntList x)) , rest, e)
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var, (show x) ):e )
+    | length rest > 0 = eval (head rest, tail rest, (var, (show x), TyIntList):e )
     | otherwise = error "invalid last line"
 
 -- SplIntListDeclare2   Int[] x
 eval ((SplIntListDeclare var), rest, e )
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var, "[]"):e )
+    | length rest > 0 = eval (head rest, tail rest, (var, "[]", TyIntList):e )
     | otherwise = error "invalid last line"
 
 -- SplIntMatrixDeclare Int[][] x
 eval ( (SplIntMatrixDeclare var), rest, e)
     | checkSameVariable var e = error "same name variables"
-    | length rest > 0 = eval (head rest, tail rest, (var, "[]"):e )
+    | length rest > 0 = eval (head rest, tail rest, (var, "[]", TyIntMatrix):e )
     | otherwise = error "invalid last line"
+
 
 
 
