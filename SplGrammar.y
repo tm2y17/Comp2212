@@ -63,7 +63,7 @@ Sentence :  Int var '=' Exp                                    { SplIntDeclare $
      | Bool var '=' Exp                                  { SplBoolDeclare $2 $4}
      | IntList var                                          { SplIntListDeclare $2}
      | IntMatrix var                                        { SplIntMatrixDeclare $2}
-     | Exp '=' Exp                                          { SplAssignment $1 $3 }
+     | var '=' Exp                                          { SplAssignment $1 $3 }
      | return '(' Exp ')'                                    { SplReturn $3 }
      | IntList var '=' Exp                                  { SplIntListAssignment $2 $4 }
      | IntMatrix var '=' Exp                                { SplIntMatrix $2 }                  
@@ -98,7 +98,7 @@ parseError (t:ts) = error ("Parse error at line:column " ++ (tokenPosn t))
 
 data Sentence =  SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplIntListDeclare String | SplIntMatrixDeclare String 
-    | SplAssignment Expr Expr | SplReturn Expr | SplIntListAssignment String Expr 
+    | SplAssignment String Expr | SplReturn Expr | SplIntListAssignment String Expr 
     | SplIntMatrix String | SplWhile Expr Sentence | SplIfThenElse Expr Sentence Sentence
     | SplIfThen Expr Sentence | SplConnecting Sentence Sentence 
     | SplIntListPush String Expr | SplIntListPop String 
