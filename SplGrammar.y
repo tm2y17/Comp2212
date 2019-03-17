@@ -30,7 +30,7 @@ import SplTokens
     pop    { TokenPop _ }
     getElement { TokenGetElement _}
     streams{ TokenStream _ }
-    print  { TokenPrint _ }
+    return { TokenReturn _ }
     '='    { TokenEq _ }
     '=='   { TokenCompare _ }
     '('    { TokenLParen _ } 
@@ -61,15 +61,16 @@ import SplTokens
 Sentence :: { Sentence }
 Sentence :  Int var '=' Exp                                    { SplIntDeclare $2 $4 }
      | Bool var '=' Exp                                  { SplBoolDeclare $2 $4}
+     | IntList var                                          { SplIntListDeclare $2}
+     | IntMatrix var                                        { SplIntMatrixDeclare $2}
      | Exp '=' Exp                                          { SplAssignment $1 $3 }
-     | print '(' Exp ')'                                    { SplPrint $3 }
+     | return '(' Exp ')'                                    { SplReturn $3 }
      | IntList var '=' Exp                                  { SplIntListAssignment $2 $4 }
-     | IntMatrix var '=' Exp                                { SplIntMatrix $2 }
+     | IntMatrix var '=' Exp                                { SplIntMatrix $2 }                  
      | while '(' Exp ')' '{' nextLine Sentence nextLine '}'    { SplWhile $3 $7 }
      | if Exp nextLine then Sentence nextLine else Sentence    { SplIfThenElse $2 $5 $8 }
      | if Exp nextLine then Sentence                                { SplIfThen $2 $5 } 
      | Sentence nextLine Sentence                                { SplConnecting $1 $3}
-     | Sentence nextLine                                          {SplSentence $1}
      | var push  '(' Exp ')'                                    { SplIntListPush $1  $4}
      | var pop '(' Exp ')'                                      { SplIntListPop $1 $4}
      
@@ -96,9 +97,10 @@ parseError [] = error "Unknown Parse Error"
 parseError (t:ts) = error ("Parse error at line:column " ++ (tokenPosn t))
 
 data Sentence =  SplIntDeclare String Expr | SplBoolDeclare String Expr
-    | SplAssignment Expr Expr | SplPrint Expr | SplIntListAssignment String Expr 
+    | SplIntListDeclare String | SplIntMatrixDeclare String 
+    | SplAssignment Expr Expr | SplReturn Expr | SplIntListAssignment String Expr 
     | SplIntMatrix String | SplWhile Expr Sentence | SplIfThenElse Expr Sentence Sentence
-    | SplIfThen Expr Sentence | SplConnecting Sentence Sentence | SplSentence Sentence
+    | SplIfThen Expr Sentence | SplConnecting Sentence Sentence 
     | SplIntListPush String Expr | SplIntListPop String Expr
     deriving (Show,Eq)
 
