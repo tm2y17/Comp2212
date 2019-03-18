@@ -100,7 +100,7 @@ data Sentence =  SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplAssignment String Expr | SplReturn String | SplIntListAssignment String Expr 
     | SplIntMatrix String | SplWhile Expr Sentence | SplIfThenElse Expr Sentence Sentence
     | SplIfThen Expr Sentence | SplConnecting Sentence Sentence 
-    | SplIntListPush String Expr | SplIntListPop String 
+    | SplIntListPush String Expr | SplIntListPop String | SplEnd
     deriving (Show,Eq)
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
