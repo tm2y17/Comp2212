@@ -11,20 +11,26 @@ main = catch main' noParse
 
 main' = do (fileName : _ ) <- getArgs 
            sourceText <- readFile fileName
-           putStrLn ("Parsing : " ++ sourceText)
+           --putStrLn ("Parsing : " ++ sourceText)
            let parsedProg = parseCalc (alexScanTokens sourceText)
-           putStrLn ("Parsed as " ++ (show parsedProg) ++ "\n")
+           --putStrLn ("Parsed as " ++ (show parsedProg) ++ "\n")
 
            content <-  getContents
            let int_List = transfer (lines content)
            
            let result = evalLoop (parseToState parsedProg (transform int_List) )
 
-           putStrLn ("Matrix: "++result)
+
+           --putStrLn ("Matrix: "++result)
            --[[Int]]
-           putStrLn ("    ")
-           putStrLn ("standard output: ")
+           --putStrLn ("    ")
+           --putStrLn ("standard output: ")
            sequence_ $ (matrixToStringList (transform (read result :: [[Int]]) ) ) >>= (\x -> [putStrLn x])
+{-}        
+           putStrLn ("testing: ")
+           let testing = evalTesting (parseToState parsedProg (transform int_List) )
+           print testing
+-}
 
 noParse :: ErrorCall -> IO ()
 noParse e = do let err =  show e
