@@ -37,8 +37,10 @@ import SplTokens
     '{'    { TokenLBigParen _ }
     '}'    { TokenRBigParen _ }
     var    { TokenVar _ $$ }
+    comments  { TokenComments _}
 
 %left nextLine
+%nonassoc comments
 %nonassoc while
 %nonassoc '{' '}'
 %nonassoc '(' ')' 
@@ -69,6 +71,9 @@ Sentence :  Int var '=' Exp                                    { SplIntDeclare $
      | while '(' Exp ')' '{' nextLine Sentence nextLine '}'    { SplWhile $3 $7 }
      | if '(' Exp ')' '{' nextLine Sentence nextLine '}' else '{' nextLine Sentence nextLine '}'  { SplIfThenElse $3 $7 $13 }
      | if '(' Exp ')' '{' nextLine Sentence nextLine '}'                   { SplIfThen $3 $7 } 
+     | comments nextLine comments                            { SplComments }
+     | Sentence comments                                    { $1 }
+     | comments                                              { SplComments }
      | Sentence nextLine Sentence                                { SplConnecting $1 $3}
      | var push  '(' Exp ')'                                    { SplIntListPush $1  $4}
      | var pop '(' ')'                                      { SplIntListPop $1 }
@@ -100,7 +105,7 @@ data Sentence =  SplIntDeclare String Expr | SplBoolDeclare String Expr
     | SplAssignment String Expr | SplReturn String | SplIntListAssignment String Expr 
     | SplIntMatrix String | SplWhile Expr Sentence | SplIfThenElse Expr Sentence Sentence
     | SplIfThen Expr Sentence | SplConnecting Sentence Sentence 
-    | SplIntListPush String Expr | SplIntListPop String | SplEnd
+    | SplIntListPush String Expr | SplIntListPop String | SplEnd | SplComments
     deriving (Show,Eq)
 
 data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Expr
@@ -109,3 +114,4 @@ data Expr = SplInt Int | SplVar String | SplTrue | SplFalse | SplIsEqual Expr Ex
     | SplIntList String
     deriving (Show,Eq)
 }
+
