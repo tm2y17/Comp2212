@@ -12,7 +12,7 @@ $white = [\ \t\f\v\r]
 tokens :-    
   \n         { tok (\p s -> TokenNextLine p) }
   $white+       ;
-  "--".*        ; 
+  "--".*         { tok (\p s -> TokenComments p)}
   Bool           { tok (\p s -> TokenTypeBool p)} 
   Int\[\]\[\]    { tok (\p s -> TokenTypeIntMatrix p) }
   Int\[\]        { tok (\p s -> TokenTypeIntList p) }
@@ -55,6 +55,7 @@ tok f p s = f p s
 -- The token type: 
 data SplToken = 
   TokenNextLine AlexPosn         |
+  TokenComments AlexPosn         |
   TokenTypeBool AlexPosn         | 
   TokenTypeInt  AlexPosn         | 
   TokenInt AlexPosn Int          |
@@ -91,6 +92,7 @@ data SplToken =
 
 tokenPosn :: SplToken -> String
 tokenPosn (TokenNextLine (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
+tokenPosn (TokenComments (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeBool (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenTypeInt  (AlexPn a l c)) = show(l) ++ ":" ++ show(c)
 tokenPosn (TokenInt  (AlexPn a l c) _) = show(l) ++ ":" ++ show(c)
