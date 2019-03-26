@@ -1,14 +1,5 @@
 Int[][] x = streams
 Int[] stream1 
 stream1 = x.getElement(0)
-stream1.pop()
-Int[] stream2
-Int index = 0
-stream2.push(0)
-while(index<stream1.length){
-    stream2.push(stream1.getElement(index))
-    index=index+1
-}
-Int[][] result 
-result.push(stream2)
-return(result)
+x.push(stream1)
+return(x)
