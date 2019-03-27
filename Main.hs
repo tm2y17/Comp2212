@@ -22,7 +22,7 @@ main' = do (fileName : _ ) <- getArgs
            --putStrLn ("standard output: ")
 
            
-           if result == "[]" then putStrLn(" ")
+           if result == "[]" then return()
            else sequence_ $ (matrixToStringList (transform (read result :: [[Int]]) ) ) >>= (\x -> [putStrLn x])
            
 
