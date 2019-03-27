@@ -1,18 +1,22 @@
 Int[][] x = streams
-Int[] x1 
-Int[] x2
-x1 = x.getElement(0)
-x2 = x.getElement(1)
-Int[] result1
-Int index =0
-Int len =0
-len = x1.length
-while(index < len){
-    Int value = 0
-    value = x1.getElement(index)+ x2.getElement(index)*3
-    index=index+1
-    result1.push(value)
+if(x.length==0){
+    return(x)
+}else{
+    Int[] x1 
+    Int[] x2
+    x1 = x.getElement(0)
+    x2 = x.getElement(1)
+    Int[] result1
+    Int index =0
+    Int len =0
+    len = x1.length
+    while(index < len){
+        Int value = 0
+        value = x1.getElement(index)+ x2.getElement(index)*3
+        index=index+1
+        result1.push(value)
+    }
+    Int[][] result
+    result.push(result1)
+    return(result)
 }
-Int[][] result
-result.push(result1)
-return(result)

@@ -1,5 +1,11 @@
 Int[][] x = streams
-Int[] stream1 
-stream1 = x.getElement(0)
-x.push(stream1)
-return(x)
+if(x.length==0){
+    return(x)
+}else{
+    Int[] stream1 
+    stream1 = x.getElement(0)
+    Int[][] result 
+    result.push(stream1)
+    result.push(stream1)
+    return(result)
+}

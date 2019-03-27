@@ -1,18 +1,22 @@
 Int[][] x = streams
-Int[] stream1 
-stream1 = x.getElement(0)
-Int[] sumList
-Int index =1
-while(index<stream1.length+1){
-    Int sum = 0
-    Int i =0
-    while(i<index){
-        sum = sum + stream1.getElement(i)
-        i=i+1
+if(x.length==0){
+    return(x)
+}else{
+    Int[] stream1 
+    stream1 = x.getElement(0)
+    Int[] sumList
+    Int index =1
+    while(index<stream1.length+1){
+        Int sum = 0
+        Int i =0
+        while(i<index){
+            sum = sum + stream1.getElement(i)
+            i=i+1
+        }
+        sumList.push(sum)
+        index=index+1
     }
-    sumList.push(sum)
-    index=index+1
+    Int[][] result 
+    result.push(sumList)
+    return(result)
 }
-Int[][] result 
-result.push(sumList)
-return(result)
