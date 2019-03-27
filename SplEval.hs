@@ -231,7 +231,7 @@ module SplEval where
               listLength1 = length (read (get2nd (getVarTuple name e))::[[Int]] )
        
     
-    evalExpr (SplIsEqual(SplInt n1) (SplInt n2)) e = getBool (n1 < n2) 
+    evalExpr (SplIsEqual(SplInt n1) (SplInt n2)) e = getBool (n1 == n2) 
     evalExpr (SplIsEqual e1 e2) e =  evalExpr (SplIsEqual (evalExpr e1 e) (evalExpr e2 e)) e 
     
     evalExpr (SplInt n) e = (SplInt n)
