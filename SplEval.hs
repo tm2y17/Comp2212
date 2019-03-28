@@ -145,18 +145,16 @@ module SplEval where
     
     -- SplIfThen   if (exp ){ ... }
     eval ((SplIfThen expr sen ),rest,e, level)
-        | rest /= [] && (myBool == SplTrue) = eval (head new_rest, tail new_rest,e, level)
-        | rest /= [] && (myBool == SplFalse) = eval (head rest, tail rest, e, level)  
-        | rest == [] = error "invalid last line"
+        | (myBool == SplTrue) = eval (head new_rest, tail new_rest,e, level)
+        | (myBool == SplFalse) = eval (head rest, tail rest, e, level)  
         where sen_list = formatSentence sen
               new_rest = sen_list ++ rest
               myBool = evalExpr expr e
               
     
     eval ( (SplIfThenElse expr sen1 sen2), rest, e , level)
-        | rest /= [] && (myBool == SplTrue) = eval ( head new_rest1, tail new_rest2, e, level)
-        | rest /= [] && (myBool == SplFalse) = eval ( head new_rest2, tail new_rest2, e, level)
-        | rest == [] = error "invalid last line"
+        | (myBool == SplTrue) = eval ( head new_rest1, tail new_rest2, e, level)
+        | (myBool == SplFalse) = eval ( head new_rest2, tail new_rest2, e, level)
         
         where sen1_list = formatSentence sen1
               sen2_list = formatSentence sen2
