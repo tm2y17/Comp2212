@@ -1,0 +1,21 @@
+Int[][] x = streams
+if(x.length == 0){
+    return(x)
+}else{
+    Int[] stream1 
+    stream1 = x.getElement(0)
+    Int[] stream2
+    stream2 = x.getElement(1)
+    Int index = 0
+    Int[] newStream 
+    while(index < stream1.length){
+        Int newValue = 0
+        newValue = stream1.getElement(index)-stream2.getElement(index)
+        newStream.push(newValue)
+        index= index+1
+    }
+    Int[][] result
+    result.push(newStream)
+    result.push(stream1)
+    return(result)
+}
