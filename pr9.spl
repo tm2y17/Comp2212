@@ -1,0 +1,33 @@
+Int[][] myStreams = streams
+Int[] stream 
+if(myStreams.length==0){
+    return(myStreams)
+}else{
+    stream = myStreams.getElement(0)
+    Int len = 0
+    len = stream.length
+    Int i=0
+    Int j=0
+    Int m=0
+    Int n=0
+    Int sum=0
+    Int[] reverseNats
+    Int[] output 
+    while(i<len) {
+        reverseNats.push(i+1)
+        i=i+1
+    }
+    while(j<len){
+        while(m<j+1) {
+            sum = sum + stream.getElement(m) * reverseNats.getElement(j-m)
+            m=m+1
+        }
+        output.push(sum)
+        sum = 0
+        m=0
+        j=j+1
+    }
+    myStreams.pop()
+    myStreams.push(output)
+    return (myStreams)
+}

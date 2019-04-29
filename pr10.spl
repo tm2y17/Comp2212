@@ -1,0 +1,28 @@
+Int[][] myStreams = streams
+Int[] stream 
+if(myStreams.length==0){
+    return(myStreams)
+}else{
+    stream = myStreams.getElement(0)
+    Int len = 0
+    len = stream.length
+    Int i=0
+    Int j=0
+    Int m=0
+    Int n=0
+    Int sum=0
+    Int[] output
+    while(i<len){
+        if(i<2){
+            sum = stream.getElement(i)
+            output.push(sum)
+        }else{
+            sum = stream.getElement(i) + output.getElement(i-2)
+            output.push(sum)
+        }
+        i=i+1
+    }
+    myStreams.pop()
+    myStreams.push(output)
+    return (myStreams)
+}
