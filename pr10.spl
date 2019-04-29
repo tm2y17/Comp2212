@@ -7,9 +7,6 @@ if(myStreams.length==0){
     Int len = 0
     len = stream.length
     Int i=0
-    Int j=0
-    Int m=0
-    Int n=0
     Int sum=0
     Int[] output
     while(i<len){
